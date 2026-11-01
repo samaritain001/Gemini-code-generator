@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Dashboard</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">Weather</p>
+                <h1>Weather Dashboard</h1>
+            </div>
+            <form class="search-form" method="get" action="/">
+                <input type="text" name="city" th:value="${weather.city}" placeholder="Search a city" aria-label="Search city">
+                <button type="submit">Search</button>
+            </form>
+        </header>
+
+        <main class="dashboard">
+            <section class="card current-card">
+                <div class="city-row">
+                    <div>
+                        <p class="label">Current Location</p>
+                        <h2 th:text="${weather.city}">Paris</h2>
+                    </div>
+                    <span class="badge" th:text="${weather.statusMessage}">Live weather from OpenWeatherMap</span>
+                </div>
+
+                <div class="current-weather">
+                    <div class="icon-wrap">
+                        <img th:src="@{'https://openweathermap.org/img/wn/' + ${weather.icon} + '@2x.png'}" alt="Weather icon">
+                    </div>
+                    <div class="temp-block">
+                        <div class="temperature" th:text="${#numbers.formatDecimal(weather.temperature, 1, 1) + '°C'}">21.0°C</div>
+                        <div class="condition" th:text="${weather.condition}">Clear</div>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <span class="stat-label">Feels like</span>
+                        <strong th:text="${#numbers.formatDecimal(weather.feelsLike, 1, 1) + '°C'}">24.1°C</strong>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">Humidity</span>
+                        <strong th:text="${weather.humidity + '%'}">52%</strong>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">Wind</span>
+                        <strong th:text="${#numbers.formatDecimal(weather.windSpeed, 1, 1) + ' km/h'}">8.4 km/h</strong>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card forecast-card">
+                <div class="section-title">5-Day Forecast</div>
+                <div class="forecast-list">
+                    <div class="forecast-item" th:each="day : ${weather.forecast}">
+                        <div class="day-name" th:text="${day.dayLabel}">Mon</div>
+                        <img th:src="@{'https://openweathermap.org/img/wn/' + ${day.icon} + '.png'}" alt="Weather icon">
+                        <div class="day-condition" th:text="${day.condition}">Clouds</div>
+                        <div class="day-temp" th:text="${#numbers.formatDecimal(day.temperature, 1, 1) + '°C'}">23.0°C</div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+</body>
+</html>
